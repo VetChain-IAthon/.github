@@ -31,7 +31,7 @@ VetChain reúne en una sola aplicación web los datos comerciales de la empresa:
 ## Arquitectura, a alto nivel
 
 ```mermaid
-flowchart LR
+flowchart TB
     U["Gerencia y vendedores"] --> W["Web Next.js en Vercel"]
     W -->|"consultas y acciones"| A["API FastAPI en Render"]
     E["Archivos privados del ERP"] -->|"carga revisada"| A
@@ -48,7 +48,7 @@ El repositorio de modelos **no es otro servidor**. Guarda archivos entrenados qu
 ### Qué ocurre al pedir un pronóstico
 
 ```mermaid
-flowchart LR
+flowchart TB
     S["Producto, escenario A o B y horizonte 1 o 3 meses"] --> H["API lee pedidos históricos de Neon"]
     H --> F["Prepara una serie mensual y variables de los últimos meses"]
     F --> P["Promedio móvil de 6 meses"]
