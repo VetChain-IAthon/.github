@@ -40,7 +40,7 @@ flowchart TB
     R -.->|"descarga durante el build"| B["Build de Render"]
     B -->|"artefactos instalados"| A
     A -->|"cifras agregadas para redactar"| G["Gemini API"]
-    D["Ejemplos visuales del modo demo"] -.->|"solo en el navegador"| W
+    D["Ejemplos simulados sembrados por migración"] -.->|"tabla separada"| DB
 ```
 
 El repositorio de modelos **no es otro servidor**. Guarda archivos entrenados que Render descarga durante la construcción del backend con un token de solo lectura. Cuando un usuario consulta un pronóstico, la API lee el historial de pedidos de Neon y ejecuta esos archivos dentro del propio servicio FastAPI. Ni el navegador ni Gemini reciben los artefactos. Si los archivos no quedan instalados, los demás módulos pueden seguir funcionando, pero el pronóstico no estará disponible.
@@ -70,9 +70,9 @@ La **mezcla predictiva** promedia Extra Trees, Gradient Boosting y el promedio m
 | Historial comercial y métricas disponibles | Pedidos y otras tablas cargadas en Neon desde los archivos del ERP | Datos registrados, sujetos a la cobertura de los archivos recibidos. |
 | Pronóstico por producto | Cálculo estadístico y modelo entrenado, aplicados al historial disponible | **Estimado**; no es una venta ni una orden de compra. |
 | Explicación con Gemini | Texto generado a partir de cifras que ya calculó la API | **IA generativa**; la fuente de cada respuesta indica si Gemini respondió o se usó un texto de reserva. |
-| Gráficos pendientes en modo demo | Ejemplos fijos definidos en el frontend | **Simulado**; no sale de Neon, no alimenta el modelo y no debe presentarse como resultado real. |
+| Gráficos y tarjetas de demostración | Filas precargadas en la tabla `simulated_sections` de Neon; la web las consulta por API | **Simulado**; no procede de los pedidos reales, no alimenta el modelo y no debe presentarse como resultado real. |
 
-El modo demo para gráficos incompletos está **en desarrollo en la web**: se activa con `?demo=1`, se conserva solo en ese navegador y puede apagarse con `?demo=0`. Rellena únicamente vistas de ejemplo marcadas «Simulado»; no inserta filas en Neon. Es distinto del escenario ilustrativo de planificación de importación, que también se identifica como simulado. La API es un **monolito modular por capas**: clientes, cotizaciones, reportes, importación de datos, predicción y explicaciones comparten el mismo servicio, con responsabilidades separadas.
+Los ejemplos se cargan por una migración del backend en una tabla **separada** de las tablas importadas del ERP. La web obtiene esos bloques mediante `GET /api/v1/simulated-sections` y los marca «Simulado». No se utilizan para entrenar ni ejecutar el pronóstico. La planificación de importación es otro escenario ilustrativo, también marcado como simulado. La API es un **monolito modular por capas**: clientes, cotizaciones, reportes, importación de datos, predicción y explicaciones comparten el mismo servicio, con responsabilidades separadas.
 
 ---
 
